@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour {
     public GameObject tutorial;
     public GameObject  blocked;
 
+    private bool fastFowardActive = false;
     [System.Serializable]
     private class WaveList
     {
@@ -77,6 +78,9 @@ public class GameManager : MonoBehaviour {
         lifeText.text = ""+this.vidas;
         if ((vidas > 0  && GameObject.FindGameObjectsWithTag("Enemy").Length == 0) && (this.turnActive && !this.generating)) {
             this.blocksDinheiro += waveList[this.actualTurn - 1].bounty;
+            if(fastFowardActive)
+                Time.timeScale = 1;
+            this.fastFowardActive = false;
             this.stopTurn();
         };
         if (this.turnActive && !this.pause)
@@ -101,13 +105,26 @@ public class GameManager : MonoBehaviour {
             if (Input.GetKey("escape"))
                 Application.Quit();
         }
-        else if(vidas > 0) {
+        else if(vidas > 0 && !this.fastFowardActive) {
             Time.timeScale = 1;
         }
     }
 
     int getActualTurn() {
         return this.actualTurn;
+    }
+
+    public void fastFoward() {
+        if (this.turnActive && !this.fastFowardActive)
+        {
+            Debug.Log("Acelera");
+            Time.timeScale = 4;
+            this.fastFowardActive = true;
+        }
+        else if(!this.pause && (this.turnActive && this.fastFowardActive)){
+            Time.timeScale = 1;
+            this.fastFowardActive = false;
+        }
     }
 
     private int getEnemyType(string type)

@@ -22,7 +22,7 @@ public class Weapon : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         GameObject[] closestEnemy = GameObject.FindGameObjectsWithTag("Enemy");
         Vector3 currentPosition = transform.position;
         GameObject bestTarget = null;
