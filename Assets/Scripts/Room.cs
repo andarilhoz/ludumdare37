@@ -49,7 +49,6 @@ public class Room : MonoBehaviour {
 
     public void placeObject(int objectId, int horizontal, int vertical)
     {
-        Debug.Log(this.espacos[horizontal, vertical]);
         if (this.espacos[horizontal, vertical] == 0)
         {
             switch (objectId)

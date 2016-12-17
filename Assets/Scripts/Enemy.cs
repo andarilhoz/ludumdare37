@@ -11,26 +11,26 @@ public class Enemy : MonoBehaviour {
     public int dano;
     public int bounty;
     public int life;
+    public int topLife;
 
     public bool slow;
     public int slowTime = 100;
+    
+
 	// Use this for initialization
 	void Start () {
         manager = GameObject.Find("GameController").GetComponent<GameManager>();
         objetivo = GameObject.FindGameObjectsWithTag("Bau")[0];
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         speed = agent.speed;
-
+        topLife = life;
     }
 	
 	// Update is called once per frame
 	void Update () {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.destination = new Vector3(objetivo.transform.position.x, objetivo.transform.position.y, objetivo.transform.position.z + 10);
-        if (this.life <= 0) {
-            //manager.GetComponent<GameManager>().blocksDinheiro += this.bounty;
-            Object.Destroy(this.gameObject);
-        }
+
 
         if (this.slow && this.slowTime >= 0)
         {
@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour {
         if (col.gameObject.tag == "Bau")
         {
             this.manager.vidas = this.manager.vidas - this.dano;
-            Object.Destroy(this.gameObject);
+            this.transform.GetComponentInParent<EnemyLife>().destroy();// Object.Destroy(this.gameObject.transform.parent);
         }
         else 
         {

@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
+    public GameObject fastFowardButton;
+
     public GameObject playPause;
 
     public Sprite pauseImage;
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour {
     public GameObject tutorial;
     public GameObject  blocked;
 
-    private bool fastFowardActive = false;
+    private int fastFowardActive = 0;
     [System.Serializable]
     private class WaveList
     {
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviour {
     void Start () {
         room.hideSpots();
         tutorial.SetActive(true);
-        this.blocksDinheiro = 4;
+        this.blocksDinheiro = 99;//4;
         this.vidas = 20;
         this.actualTurn = 0;
         this.turnActive = false;
@@ -78,9 +80,10 @@ public class GameManager : MonoBehaviour {
         lifeText.text = ""+this.vidas;
         if ((vidas > 0  && GameObject.FindGameObjectsWithTag("Enemy").Length == 0) && (this.turnActive && !this.generating)) {
             this.blocksDinheiro += waveList[this.actualTurn - 1].bounty;
-            if(fastFowardActive)
+            if(fastFowardActive > 0)
                 Time.timeScale = 1;
-            this.fastFowardActive = false;
+            this.fastFowardActive = 0;
+            fastFowardButton.GetComponent<Text>().text = "FASTFOWARD 1X";
             this.stopTurn();
         };
         if (this.turnActive && !this.pause)
@@ -105,7 +108,7 @@ public class GameManager : MonoBehaviour {
             if (Input.GetKey("escape"))
                 Application.Quit();
         }
-        else if(vidas > 0 && !this.fastFowardActive) {
+        else if(vidas > 0 && !(this.fastFowardActive > 0)) {
             Time.timeScale = 1;
         }
     }
@@ -115,15 +118,30 @@ public class GameManager : MonoBehaviour {
     }
 
     public void fastFoward() {
-        if (this.turnActive && !this.fastFowardActive)
+        if (this.turnActive && this.fastFowardActive == 0  && this.fastFowardActive < 2)
         {
             Debug.Log("Acelera");
+            Time.timeScale = 2;
+            this.fastFowardActive = 2;
+            fastFowardButton.GetComponent<Text>().text = "FASTFOWARD 2X";
+        } else if(this.turnActive && this.fastFowardActive > 1 && this.fastFowardActive < 3)
+        {
+            Debug.Log("Celeeera");
             Time.timeScale = 4;
-            this.fastFowardActive = true;
+            this.fastFowardActive = 4;
+            fastFowardButton.GetComponent<Text>().text = "FASTFOWARD 4X";
         }
-        else if(!this.pause && (this.turnActive && this.fastFowardActive)){
+        else if (this.turnActive && this.fastFowardActive > 3 && this.fastFowardActive < 5)
+        {
+            Debug.Log("Celeeera");
+            Time.timeScale = 6;
+            this.fastFowardActive = 6;
+            fastFowardButton.GetComponent<Text>().text = "FASTFOWARD 6X";
+        }
+        else if(!this.pause && (this.turnActive && (this.fastFowardActive > 0))){
             Time.timeScale = 1;
-            this.fastFowardActive = false;
+            this.fastFowardActive = 0;
+            fastFowardButton.GetComponent<Text>().text = "FASTFOWARD 1X";
         }
     }
 
