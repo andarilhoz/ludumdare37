@@ -56,9 +56,9 @@ public class GameManager : MonoBehaviour {
     void Start () {
         room.hideSpots();
         tutorial.SetActive(true);
-        this.blocksDinheiro = 4;
+        this.blocksDinheiro = 99;//4;
         this.vidas = 20;
-        this.actualTurn = 0;
+        this.actualTurn = 10;
         this.turnActive = false;
         this.activeWeapon = 2;
         Time.timeScale = 1;
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour {
             gameOver.SetActive(true);
             Time.timeScale = 0;
         }
-        if (this.actualTurn > 10) {
+        if (this.actualTurn > waveList.Length) {
             gameWin.SetActive(true);
             Time.timeScale = 0;
         }
@@ -205,8 +205,12 @@ public class GameManager : MonoBehaviour {
 
 
     public void nextTurn() {
-
-        if (spawn.canStart() && !this.turnActive)
+        if (this.actualTurn >= waveList.Length)
+        {
+            gameWin.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else  if (spawn.canStart() && !this.turnActive)
         {
             Debug.Log("chegou");
             Waves w = waveList[this.actualTurn];

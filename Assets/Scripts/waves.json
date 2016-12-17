@@ -11,13 +11,18 @@
 			"bounty": 3
 		},
 		{
-			"type": ["soldier"],
-			"quantity": [10],
+			"type": ["soldier","car"],
+			"quantity": [5,1],
+			"bounty": 3
+		},
+		{
+			"type": ["soldier","car"],
+			"quantity": [10,2],
 			"bounty": 4
 		},
 		{
-			"type": ["soldier"],
-			"quantity": [15],
+			"type": ["soldier","car"],
+			"quantity": [15,3],
 			"bounty": 5
 		},
 		{
@@ -33,6 +38,11 @@
 		{
 			"type": ["car"],
 			"quantity": [5],
+			"bounty": 3
+		},
+		{
+			"type": ["doll","car"],
+			"quantity": [5,5],
 			"bounty": 3
 		},
 		{
