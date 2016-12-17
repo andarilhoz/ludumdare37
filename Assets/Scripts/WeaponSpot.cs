@@ -5,6 +5,8 @@ using UnityEngine;
 public class WeaponSpot : MonoBehaviour {
     public Material mouseOver;
     public Material onDefault;
+    public Material onWrong;
+
     public GameObject chao;
     private GameObject GM;
 
@@ -12,8 +14,10 @@ public class WeaponSpot : MonoBehaviour {
     private GameObject ghost2;
     private GameObject ghost3;
 
-    private int horizontal;
-    private int vertical;
+    public int horizontal;
+    public int vertical;
+
+    public bool busy;
 
     public static int[] active;
     private int[] me;
@@ -34,6 +38,7 @@ public class WeaponSpot : MonoBehaviour {
         ghost2 = GameObject.Find("basicGhost");
         ghost3 = GameObject.Find("basicGhost");
         GM = GameObject.Find("GameController");
+        busy = false;
 
         me = new int[]{ horizontal, vertical};
 
@@ -47,24 +52,32 @@ public class WeaponSpot : MonoBehaviour {
     private void OnMouseEnter()
     {
         active = me;
-        switch (GM.GetComponent<GameManager>().getWeapon()) {
-            case 0:
-                break;
-            case 1:
-                ghost1.transform.position = this.transform.position;
-                break;
-            case 2:
-                ghost2.transform.position = this.transform.position;
-                break;
-            case 3:
-                ghost3.transform.position = this.transform.position;
-                break;
-            default:
-                Debug.Log("Deu merda bixo");
-                break;
+        if (!this.busy)
+        {
+           
+            switch (GM.GetComponent<GameManager>().getWeapon())
+            {
+                case 0:
+                    break;
+                case 1:
+                    ghost1.transform.position = this.transform.position;
+                    break;
+                case 2:
+                    ghost2.transform.position = this.transform.position;
+                    break;
+                case 3:
+                    ghost3.transform.position = this.transform.position;
+                    break;
+                default:
+                    Debug.Log("Deu merda bixo");
+                    break;
+            }
+
+            GetComponent<Renderer>().material = mouseOver;
         }
-        
-        GetComponent<Renderer>().material = mouseOver;
+        else {
+            GetComponent<Renderer>().material = onWrong;
+        }
     }
 
     private void OnMouseExit()

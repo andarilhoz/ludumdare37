@@ -10,7 +10,7 @@ public class Room : MonoBehaviour {
     public GameObject Arma2;
     public GameObject Arma3;
 
-
+    private WeaponSpot targetSpot;
     private GameObject[] spots;
     private static GameObject GM;
 
@@ -51,6 +51,14 @@ public class Room : MonoBehaviour {
     {
         if (this.espacos[horizontal, vertical] == 0)
         {
+            GameObject[] spots = GameObject.FindGameObjectsWithTag("Spot");
+            foreach (GameObject spot in spots)
+            {
+                if (spot.GetComponent<WeaponSpot>().horizontal == horizontal && spot.GetComponent<WeaponSpot>().vertical == vertical)
+                {
+                    targetSpot =  spot.GetComponent<WeaponSpot>();
+                }
+            }
             switch (objectId)
             {
                 case 0:
@@ -63,6 +71,7 @@ public class Room : MonoBehaviour {
                                     this.transform.position.z + (5 * vertical) - 10), Quaternion.identity);
                         arma1.GetComponent<Weapon>().setId(horizontal, vertical);
                         this.espacos[horizontal, vertical] = objectId;
+                        targetSpot.busy = false;
                         GM.GetComponent<GameManager>().blocksDinheiro -= 5;
                     }
                     break;
@@ -73,12 +82,14 @@ public class Room : MonoBehaviour {
                                     this.transform.position.z + (5 * vertical) - 10), Quaternion.identity);
                         arma2.GetComponent<Weapon>().setId(horizontal, vertical);
                         this.espacos[horizontal, vertical] = objectId;
+                        targetSpot.busy = true;
                         GM.GetComponent<GameManager>().blocksDinheiro -= 3;
                     }
                     break;
                 case 3:
                     GameObject arma3 = Instantiate(Arma3, new Vector3(this.transform.position.x + (5 * horizontal) - 10, this.transform.position.y + 0.6f,
                                 this.transform.position.z + (5 * vertical) - 10), Quaternion.identity);
+                    targetSpot.busy = true;
                     arma3.GetComponent<Weapon>().setId(horizontal, vertical);
                     break;
                 default:
@@ -97,6 +108,12 @@ public class Room : MonoBehaviour {
     }
 
     public void removeObject(int horizontal, int vertical) {
+        GameObject[] spots = GameObject.FindGameObjectsWithTag("Spot");
+        foreach (GameObject spot in spots) {
+            if (spot.GetComponent<WeaponSpot>().horizontal == horizontal && spot.GetComponent<WeaponSpot>().vertical == vertical) {
+                spot.GetComponent<WeaponSpot>().busy = false;
+            }
+        }
         if (GameObject.FindGameObjectsWithTag("Weapon").Length == 1 && GM.GetComponent<GameManager>().blocksDinheiro < 3)
         {
             GM.GetComponent<GameManager>().blocksDinheiro = 3;

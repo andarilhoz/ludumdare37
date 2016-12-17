@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
         this.activeWeapon = 2;
         Time.timeScale = 1;
         //spawn.spawnEnemy();
+        Screen.sleepTimeout = (int)SleepTimeout.NeverSleep;
 
 
         WaveList wl = new WaveList();
