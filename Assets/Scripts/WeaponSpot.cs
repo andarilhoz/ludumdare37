@@ -14,6 +14,9 @@ public class WeaponSpot : MonoBehaviour {
 
     private int horizontal;
     private int vertical;
+
+    public static int[] active;
+    private int[] me;
     // Use this for initialization
     private void Awake()
     {
@@ -32,6 +35,8 @@ public class WeaponSpot : MonoBehaviour {
         ghost3 = GameObject.Find("basicGhost");
         GM = GameObject.Find("GameController");
 
+        me = new int[]{ horizontal, vertical};
+
     }
 	
 	// Update is called once per frame
@@ -41,6 +46,7 @@ public class WeaponSpot : MonoBehaviour {
 
     private void OnMouseEnter()
     {
+        active = me;
         switch (GM.GetComponent<GameManager>().getWeapon()) {
             case 0:
                 break;
@@ -63,32 +69,33 @@ public class WeaponSpot : MonoBehaviour {
 
     private void OnMouseExit()
     {
+        active = new int[] { };
         ghost1.transform.position = new Vector3(-20, -20, -20);
         ghost2.transform.position = new Vector3(-20, -20, -20);
         GetComponent<Renderer>().material = onDefault;
     }
 
-    private void OnMouseDown()
+    private void OnMouseUp()
     {
-        Debug.Log("horizontal: " + this.horizontal + " vertical: " + this.vertical);
+       // Debug.Log("horizontal: " + this.horizontal + " vertical: " + this.vertical);
         switch (GM.GetComponent<GameManager>().getWeapon()) {
             case 0:
-                chao.GetComponent<Room>().placeObject(0, this.horizontal, this.vertical);
+                chao.GetComponent<Room>().placeObject(0, active[0], active[1]);
                 GameObject[] weapons = GameObject.FindGameObjectsWithTag("Weapon");
                 foreach (GameObject weapon in weapons) {
-                    if (weapon.GetComponent<Weapon>().getId()[0] == this.horizontal && weapon.GetComponent<Weapon>().getId()[1] == this.vertical) {
+                    if (weapon.GetComponent<Weapon>().getId()[0] == active[0] && weapon.GetComponent<Weapon>().getId()[1] == active[1]) {
                         Object.Destroy(weapon.gameObject);
                     }
                 }
                 break;
             case 1:
-                chao.GetComponent<Room>().placeObject(1, this.horizontal, this.vertical);
+                chao.GetComponent<Room>().placeObject(1, active[0], active[1]);
                 break;
             case 2:
-                chao.GetComponent<Room>().placeObject(2, this.horizontal, this.vertical);
+                chao.GetComponent<Room>().placeObject(2, active[0], active[1]);
                 break;
             case 3:
-                chao.GetComponent<Room>().placeObject(3, this.horizontal, this.vertical);
+                chao.GetComponent<Room>().placeObject(3, active[0], active[1]);
                 break;
             default:
                 Debug.Log("Deu merda bixo");

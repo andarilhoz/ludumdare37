@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour {
     void Start () {
         room.hideSpots();
         tutorial.SetActive(true);
-        this.blocksDinheiro = 99;//4;
+        this.blocksDinheiro = 4;
         this.vidas = 20;
         this.actualTurn = 0;
         this.turnActive = false;
